@@ -3,11 +3,13 @@ import terser from "@rollup/plugin-terser";
 import commonjs from "@rollup/plugin-commonjs";
 
 const external = [
-  "deepl-node"
+  "deepl-node",
+  "zod",
 ];
 
 const globals = {
-  "deepl-node": "deepl"
+  "deepl-node": "deepl",
+  "zod": "zod",
 };
 
 const plugins = [pluginTypescript(), commonjs()];

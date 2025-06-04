@@ -1,4 +1,4 @@
-import translateAdapterBuilder from "@/translate_adapter_builder";
-import { TranslateAdapter } from "@/translate_adapter";
+import translateAdapterHelper from "@/translate_adapter_helper";
+import * as TranslateAdapterSchemas from "@/translate_adapter_schemas";
 
-export { translateAdapterBuilder, type TranslateAdapter };
+export { translateAdapterHelper, type TranslateAdapterSchemas };
