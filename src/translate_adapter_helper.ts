@@ -1,8 +1,8 @@
-import { DeeplClientBuilderArgs, deeplAdapterBuilder } from "@/deepl_adapter";
+import { deeplAdapterBuilder } from "@/deepl_adapter";
 import { TranslateId, TranslateAdapterBuilder, TranslateAdapter, TranslateTextArgs } from "@/translate_adapter_schemas";
 
 const getAdapter = (translateId: TranslateId): TranslateAdapter => {
-  const translateAdapterMap: Record<TranslateId, TranslateAdapterBuilder<DeeplClientBuilderArgs> | TranslateAdapter> = {
+  const translateAdapterMap: Record<TranslateId, TranslateAdapterBuilder<any> | TranslateAdapter> = {
     DeepL: deeplAdapterBuilder,
   };
 
