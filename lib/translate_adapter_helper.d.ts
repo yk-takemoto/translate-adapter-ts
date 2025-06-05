@@ -1,7 +1,9 @@
-import { TranslateId, TranslateTextArgs } from "./translate_adapter_schemas";
-declare const translateAdapterHelper: (params: {
+import { TranslateId, TranslateAdapterInputParams, TranslateTextArgs } from "./translate_adapter_schemas";
+type TranslateAdapterHelperParams = {
     translateId: TranslateId;
-}) => {
-    translateText: (args: TranslateTextArgs) => Promise<string>;
+    buildClientInputParams?: TranslateAdapterInputParams<any, Record<string, any>>;
+};
+declare const translateAdapterHelper: (helperParams: TranslateAdapterHelperParams) => {
+    translateText: (params: TranslateAdapterInputParams<TranslateTextArgs>) => Promise<string>;
 };
 export default translateAdapterHelper;
