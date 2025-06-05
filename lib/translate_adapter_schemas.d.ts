@@ -5,13 +5,13 @@ export declare const GeneralResultSchema: z.ZodUnion<[z.ZodRecord<z.ZodString, z
 type GeneralResult = z.infer<typeof GeneralResultSchema>;
 export declare const GeneralConfigSchema: z.ZodRecord<z.ZodString, z.ZodAny>;
 type GeneralConfig = z.infer<typeof GeneralConfigSchema>;
-type TranslateAdapterInputParams<ArgumentsType = GeneralArguments, ConfigType = GeneralConfig> = {
+export type TranslateAdapterInputParams<ArgumentsType = GeneralArguments, ConfigType = GeneralConfig> = {
     args?: ArgumentsType;
     argsSchema?: z.ZodType<ArgumentsType>;
     config?: ConfigType;
     configSchema?: z.ZodType<ConfigType>;
 };
-type TranslateAdapterBuilderInputParams<ClientBuildArgsType = GeneralArguments, AdapterBuildArgsType = GeneralArguments> = {
+export type TranslateAdapterBuilderInputParams<ClientBuildArgsType = GeneralArguments, AdapterBuildArgsType = GeneralArguments> = {
     buildArgs?: AdapterBuildArgsType;
     buildArgsSchema?: z.ZodType<AdapterBuildArgsType>;
     buildClientInputParams?: TranslateAdapterInputParams<ClientBuildArgsType>;

@@ -1,28 +1,32 @@
 import { deeplAdapterBuilder } from "@/deepl_adapter";
-import { TranslateId, TranslateAdapterBuilder, TranslateAdapter, TranslateTextArgs } from "@/translate_adapter_schemas";
+import { TranslateId, TranslateAdapterInputParams, TranslateAdapterBuilder, TranslateAdapter, TranslateTextArgs } from "@/translate_adapter_schemas";
 
-const getAdapter = (translateId: TranslateId): TranslateAdapter => {
-  const translateAdapterMap: Record<TranslateId, TranslateAdapterBuilder<any> | TranslateAdapter> = {
+type TranslateAdapterHelperParams = {
+  translateId: TranslateId;
+  buildClientInputParams?: TranslateAdapterInputParams<any, Record<string, any>>;
+};
+
+const getAdapter = (params: TranslateAdapterHelperParams): TranslateAdapter => {
+  const translateAdapterMap: Record<TranslateId, TranslateAdapterBuilder<any>> = {
     DeepL: deeplAdapterBuilder,
   };
 
-  const adapter =
-    "build" in translateAdapterMap[translateId] ? translateAdapterMap[translateId].build({ buildArgs: translateId }) : translateAdapterMap[translateId];
+  const adapter = translateAdapterMap[params.translateId].build({ buildArgs: params.translateId, buildClientInputParams: params.buildClientInputParams });
   if (!adapter) {
-    throw new Error(`[translateAdapterHelper] Adapter for ${translateId} is not available.`);
+    throw new Error(`[translateAdapterHelper] Adapter for ${params.translateId} is not available.`);
   }
 
   return adapter;
 };
 
-const translateAdapterHelper = (params: { translateId: TranslateId }) => ({
-  translateText: async (args: TranslateTextArgs) => {
-    const adapter = getAdapter(params.translateId);
+const translateAdapterHelper = (helperParams: TranslateAdapterHelperParams) => ({
+  translateText: async (params: TranslateAdapterInputParams<TranslateTextArgs>) => {
+    const adapter = getAdapter(helperParams);
     if (!("translateText" in adapter) || !adapter.translateText) {
-      throw new Error(`[translateAdapterHelper#translateText] Adapter for ${params.translateId} does not support translateText.`);
+      throw new Error(`[translateAdapterHelper#translateText] Adapter for ${helperParams.translateId} does not support translateText.`);
     }
 
-    return await adapter.translateText({ args });
+    return await adapter.translateText(params);
   },
 });
 

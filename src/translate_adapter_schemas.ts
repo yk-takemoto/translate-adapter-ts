@@ -7,14 +7,14 @@ type GeneralResult = z.infer<typeof GeneralResultSchema>;
 export const GeneralConfigSchema = z.record(z.any());
 type GeneralConfig = z.infer<typeof GeneralConfigSchema>;
 
-type TranslateAdapterInputParams<ArgumentsType = GeneralArguments, ConfigType = GeneralConfig> = {
+export type TranslateAdapterInputParams<ArgumentsType = GeneralArguments, ConfigType = GeneralConfig> = {
   args?: ArgumentsType;
   argsSchema?: z.ZodType<ArgumentsType>;
   config?: ConfigType;
   configSchema?: z.ZodType<ConfigType>;
 };
 
-type TranslateAdapterBuilderInputParams<ClientBuildArgsType = GeneralArguments, AdapterBuildArgsType = GeneralArguments> = {
+export type TranslateAdapterBuilderInputParams<ClientBuildArgsType = GeneralArguments, AdapterBuildArgsType = GeneralArguments> = {
   buildArgs?: AdapterBuildArgsType;
   buildArgsSchema?: z.ZodType<AdapterBuildArgsType>;
   buildClientInputParams?: TranslateAdapterInputParams<ClientBuildArgsType>;

@@ -28,8 +28,10 @@ describe("TranslateAdapterHelper 統合テスト", function () {
 
       const helper = translateAdapterHelper({ translateId: "DeepL" });
       const result = await helper.translateText({
-        sourceText: "Hello, this is a test for the translate adapter helper.",
-        targetLang: "JA",
+        args: {
+          sourceText: "Hello, this is a test for the translate adapter helper.",
+          targetLang: "JA",
+        },
       });
 
       expect(result).to.be.a("string").and.to.not.be.empty;
@@ -41,9 +43,11 @@ describe("TranslateAdapterHelper 統合テスト", function () {
 
       const helper = translateAdapterHelper({ translateId: "DeepL" });
       const result = await helper.translateText({
-        sourceText: "こんにちは、これは翻訳アダプターヘルパーのテストです。",
-        sourceLang: "JA",
-        targetLang: "EN-US",
+        args: {
+          sourceText: "こんにちは、これは翻訳アダプターヘルパーのテストです。",
+          sourceLang: "JA",
+          targetLang: "EN-US",
+        },
       });
 
       expect(result).to.be.a("string").and.to.not.be.empty;
@@ -64,8 +68,10 @@ describe("TranslateAdapterHelper 統合テスト", function () {
         This has greatly improved the quality of automated translations.
       `;
       const result = await helper.translateText({
-        sourceText: longText,
-        targetLang: "JA",
+        args: {
+          sourceText: longText,
+          targetLang: "JA",
+        },
       });
 
       expect(result).to.be.a("string").and.to.not.be.empty;
@@ -79,8 +85,10 @@ describe("TranslateAdapterHelper 統合テスト", function () {
 
       // 英語からドイツ語
       const germanResult = await helper.translateText({
-        sourceText: "Artificial Intelligence is transforming the world.",
-        targetLang: "DE",
+        args: {
+          sourceText: "Artificial Intelligence is transforming the world.",
+          targetLang: "DE",
+        },
       });
 
       expect(germanResult).to.be.a("string").and.to.not.be.empty;
@@ -88,9 +96,11 @@ describe("TranslateAdapterHelper 統合テスト", function () {
 
       // ドイツ語からフランス語
       const frenchResult = await helper.translateText({
-        sourceText: germanResult,
-        sourceLang: "DE",
-        targetLang: "FR",
+        args: {
+          sourceText: germanResult,
+          sourceLang: "DE",
+          targetLang: "FR",
+        },
       });
 
       expect(frenchResult).to.be.a("string").and.to.not.be.empty;
@@ -98,9 +108,11 @@ describe("TranslateAdapterHelper 統合テスト", function () {
 
       // フランス語から日本語
       const japaneseResult = await helper.translateText({
-        sourceText: frenchResult,
-        sourceLang: "FR",
-        targetLang: "JA",
+        args: {
+          sourceText: frenchResult,
+          sourceLang: "FR",
+          targetLang: "JA",
+        },
       });
 
       expect(japaneseResult).to.be.a("string").and.to.not.be.empty;
@@ -112,14 +124,40 @@ describe("TranslateAdapterHelper 統合テスト", function () {
 
       const helper = translateAdapterHelper({ translateId: "DeepL" });
       const result = await helper.translateText({
-        sourceText: ["First sentence", "Second sentence", "Third sentence"],
-        targetLang: "JA",
-        delimiter: " | ",
+        args: {
+          sourceText: ["First sentence", "Second sentence", "Third sentence"],
+          targetLang: "JA",
+          delimiter: " | ",
+        },
       });
 
       expect(result).to.be.a("string").and.to.not.be.empty;
       expect(result.split(" | ")).to.have.lengthOf(3);
       console.log(`DeepL 配列翻訳結果: ${result}`);
+    });
+
+    it("カスタムAPIキーを使用して翻訳できること", async function () {
+      if (!hasDeeplEnv) this.skip();
+
+      const customApiKey = process.env.DEEPL_API_KEY;
+      const helper = translateAdapterHelper({
+        translateId: "DeepL",
+        buildClientInputParams: {
+          args: {
+            apiKey: customApiKey!,
+          },
+        },
+      });
+
+      const result = await helper.translateText({
+        args: {
+          sourceText: "Custom API key test",
+          targetLang: "DE",
+        },
+      });
+
+      expect(result).to.be.a("string").and.to.not.be.empty;
+      console.log(`カスタムAPIキーによる翻訳結果: ${result}`);
     });
 
     it("エラー処理: 無効なパラメータでエラーが発生すること", async function () {
@@ -129,8 +167,10 @@ describe("TranslateAdapterHelper 統合テスト", function () {
 
       try {
         await helper.translateText({
-          sourceText: "", // 空の文字列
-          targetLang: "JA",
+          args: {
+            sourceText: "", // 空の文字列
+            targetLang: "JA",
+          },
         });
         expect.fail("エラーが発生しませんでした");
       } catch (error: any) {
